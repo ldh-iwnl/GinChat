@@ -1,0 +1,92 @@
+info:
+  contact: {}
+paths:
+  /index:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - main page
+  /user/createUser:
+    get:
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: password
+        in: query
+        name: password
+        type: string
+      - description: rePassword
+        in: query
+        name: rePassword
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Create an user
+      tags:
+      - Create User
+  /user/deleteUser:
+    get:
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete an user
+      tags:
+      - Delete User
+  /user/list:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Get all the user as a list
+      tags:
+      - get user list
+  /user/updateUser:
+    post:
+      parameters:
+      - description: id
+        in: formData
+        name: id
+        type: string
+      - description: name
+        in: formData
+        name: name
+        type: string
+      - description: password
+        in: formData
+        name: password
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Update an user
+      tags:
+      - Update User
+swagger: "2.0"
