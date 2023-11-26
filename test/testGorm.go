@@ -2,18 +2,21 @@ package main
 
 import (
 	"ginchat/models"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
-
-	DB.AutoMigrate(&models.UserBasic{})
+	db, _ := gorm.Open(mysql.Open("root:root@tcp(127.0.0.1:3306)/ginchat?charset=utf8mb3&parseTime=True&loc=Local"), &gorm.Config{})
+	db.AutoMigrate(&models.UserBasic{})
 
 	// Create
 	user := &models.UserBasic{}
 	user.Name = "test"
-	DB.Create(user)
+	db.Create(user)
 
 	// Read
-	DB.First(user, 1)
-	DB.Model(user).Update("PassWord", "password")
+	db.First(user, 1)
+	db.Model(user).Update("PassWord", "password")
 }

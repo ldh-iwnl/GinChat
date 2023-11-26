@@ -54,10 +54,6 @@ paths:
       - Delete User
   /user/list:
     get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
       responses:
         "200":
           description: OK
@@ -66,6 +62,25 @@ paths:
       summary: Get all the user as a list
       tags:
       - get user list
+  /user/login:
+    post:
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: password
+        in: query
+        name: password
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Login as a user
+      tags:
+      - Login
   /user/updateUser:
     post:
       parameters:
@@ -81,6 +96,14 @@ paths:
         in: formData
         name: password
         type: integer
+      - description: phone
+        in: formData
+        name: phone
+        type: string
+      - description: email
+        in: formData
+        name: email
+        type: string
       responses:
         "200":
           description: OK
