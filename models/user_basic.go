@@ -41,6 +41,10 @@ func GetUserList() []*UserBasic {
 func Login(name, password string) UserBasic {
 	user := UserBasic{}
 	utils.DB.Where("name = ? and pass_word = ?", name, password).First(&user)
+	//add token into identity column
+	str := fmt.Sprintf("%d", time.Now().Unix())
+	temp := utils.MD5Encode(str)
+	utils.DB.Model(&user).Where("id = ?", user.ID).Update("Identity", temp)
 	return user
 }
 

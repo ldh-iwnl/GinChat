@@ -75,7 +75,9 @@ func DeleteUser(c *gin.Context) {
 	user.ID = uint(id)
 	models.DeleteUser(user)
 	c.JSON(200, gin.H{
+		"code":    0,
 		"message": "delete successfully",
+		"data":    user,
 	})
 }
 
@@ -94,20 +96,25 @@ func Login(c *gin.Context) {
 	user := models.FindUserByName(name)
 	if user.Name != name {
 		c.JSON(200, gin.H{
+			"code":    -1,
 			"message": "user is not exist",
+			"data":    data,
 		})
 		return
 	}
 	flag := utils.ValidatePassword(password, user.Salt, user.PassWord)
 	if !flag {
 		c.JSON(200, gin.H{
+			"code":    -1,
 			"message": "password is not correct",
+			"data":    data,
 		})
 		return
 	}
 	// login
 	data = models.Login(name, utils.MakePassword(password, user.Salt))
 	c.JSON(200, gin.H{
+		"code":    0,
 		"message": data,
 	})
 
