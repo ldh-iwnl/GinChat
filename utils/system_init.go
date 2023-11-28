@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -69,4 +70,24 @@ func InitRedis() {
 		panic(err)
 	}
 	fmt.Println("key", val)
+}
+
+const (
+	PublishKey = "websocket"
+)
+
+// publish msg on redis
+func Publish(ctx context.Context, channel string, msg string) error {
+	var err error
+	fmt.Println("publishing msg: ", msg)
+	err = Redis.Publish(ctx, channel, msg).Err()
+	return err
+}
+
+// subscribe to redis channel
+func Subscribe(ctx *gin.Context, channel string) (string, error) {
+	sub := Redis.Subscribe(ctx, channel)
+	fmt.Println("sub: ", sub)
+	msg, err := sub.ReceiveMessage(ctx)
+	return msg.Payload, err
 }

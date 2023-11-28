@@ -5,10 +5,13 @@ import (
 	"ginchat/models"
 	"ginchat/utils"
 	"math/rand"
+	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 // @Summary Get all the user as a list
@@ -149,5 +152,37 @@ func UpdateUser(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "update successfully",
 		})
+	}
+}
+
+// avoid cross origin
+var upGrade = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+func SendMsg(ctx *gin.Context) {
+	ws, err := upGrade.Upgrade(ctx.Writer, ctx.Request, nil)
+	if err != nil {
+		fmt.Println("upgrade failed, err:", err)
+		return
+	}
+	defer ws.Close()
+	MsgHandler(ws, ctx)
+}
+
+func MsgHandler(ws *websocket.Conn, ctx *gin.Context) {
+	msg, err := utils.Subscribe(ctx, utils.PublishKey)
+	if err != nil {
+		fmt.Println("subscribe failed, err:", err)
+		return
+	}
+	tm := time.Now().Format("2006-01-02 15:04:05")
+	finalMsg := fmt.Sprintf("[ws][%s]:%s", tm, msg)
+	ws.WriteMessage(1, []byte(finalMsg))
+	if err != nil {
+		fmt.Println("write message failed, err:", err)
+		return
 	}
 }
