@@ -20,5 +20,6 @@ func Router() *gin.Engine {
 	r.POST("/user/updateUser", service.UpdateUser)
 	r.POST("/user/login", service.Login)
 	r.GET("/user/sendMsg", service.SendMsg)
-	return r // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.GET("/user/sendUserMsg", service.SendUserMsg)
+	return r // listen and serve on 0.0.0.0:8081 (for windows "localhost:8081")
 }

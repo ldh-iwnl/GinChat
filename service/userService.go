@@ -186,3 +186,7 @@ func MsgHandler(ws *websocket.Conn, ctx *gin.Context) {
 		return
 	}
 }
+
+func SendUserMsg(ctx *gin.Context) {
+	models.Chat(ctx.Writer, ctx.Request)
+}
